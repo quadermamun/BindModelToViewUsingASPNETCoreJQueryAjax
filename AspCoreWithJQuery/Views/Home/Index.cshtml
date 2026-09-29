@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            @* Google Search Boostrap Textbox *@
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Name</label>
+                <input type="text" class="form-control" id="Name" placeholder="Name">
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Surname</label>
+                <input type="text" class="form-control" id="Surname" placeholder="Surname">
+            </div>
+            <br />
+            <button class="btn btn-info" onclick="Display()">Submit</button>
+            <br />
+            <h3 id="result"></h3>
+
+
+
+            @* Google Search Boostrap Textbox *@
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Number1</label>
+                <input type="text" class="form-control" id="Num1" placeholder="Num 1">
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Number2</label>
+                <input type="text" class="form-control" id="Num2" placeholder="Num 2">
+            </div>
+            <br />
+            <button class="btn btn-info" onclick="Add()">Add</button>            
+            <button class="btn btn-info" onclick="Subtract()">Subtract</button>
+            <button class="btn btn-info" onclick="Calculate()">Calculate</button>
+            <br />
+            <h3 id="resultCal"></h3>
+            <h3 id="resultAdd"></h3>
+            <h3 id="resultSubtract"></h3>
+            <h3 id="resultMultiply"></h3>
+            <h3 id="resultDivision"></h3>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    // $(document).ready(function(){
+    //     alert("Welcome to jquery")
+    // });
+
+    function Display()
+    {
+        var name= $("#Name").val();
+        var surname= $("#Surname").val();
+
+        var data = name + " " + surname;
+
+        $("#result").text(data);
+    }
+
+    function Add()
+    {
+        
+        var num1= parseFloat($("#Num1").val());
+        var num2= parseFloat($("#Num2").val());
+
+        $.ajax({
+            type:'POST',
+            url:'@Url.Action("Add")',
+            data:{number1:num1,number2:num2},
+            dataType:'text',
+            success:function(response, status, xhr){                
+                $("#resultCal").text(response);
+            },
+            error:function(req,status,error){
+                $("#resultCal").text(error);
+            }
+        });
+        
+    }
+
+     function Subtract()
+    {
+        
+        var num1= parseFloat($("#Num1").val());
+        var num2= parseFloat($("#Num2").val());
+
+        $.ajax({
+            type:'POST',
+            url:'@Url.Action("Subtract")',
+            data:{number1:num1,number2:num2},
+            dataType:'text',
+            success:function(response, status, xhr){                
+                $("#resultCal").text(response);
+            },
+            error:function(req,status,error){
+                $("#resultCal").text(error);
+            }
+        });
+        
+    }
+
+    function Calculate()
+    {
+
+        var num1= parseFloat($("#Num1").val());
+        var num2= parseFloat($("#Num2").val());
+
+        $.ajax({
+            type:'POST',
+            url:'@Url.Action("Calculate")',
+            data:{number1:num1,number2:num2},
+            dataType:'json',
+            success:function(response, status, xhr){
+                $("#resultAdd").text("Addiation:" +response.add);
+                $("#resultSubtract").text("Subtraction:" +response.subtract);
+                $("#resultMultiply").text("Multiply:" + response.multiply);
+                $("#resultDivision").text("Division:" + response.division);
+            },
+            error:function(req,status,error){
+                $("#resultCal").text(error);
+            }
+        });
+
+    }
+
+</script>
